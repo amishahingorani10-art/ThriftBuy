@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Details - THRIFTBUY</title>
+    <link rel="stylesheet" href="css/product.css">
+    <style>
+        .seller-details-card {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .seller-details-card h1 {
+            margin-bottom: 25px;
+        }
+
+        .seller-details-card p {
+            margin: 16px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .seller-details-card button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 7px;
+            background: #25D366;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .seller-details-card .back-button {
+            background: #333;
+        }
+
+        #sellerMessage {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">THRIFTBUY</div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="sell.html">Sell</a>
+            <a href="cart.html">Cart</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <main class="seller-details-card">
+        <h1>Seller Details</h1>
+
+        <p><strong>Name:</strong> <span id="sellerName">Loading...</span></p>
+        <p><strong>City:</strong> <span id="sellerCity">Loading...</span></p>
+        <p><strong>Phone:</strong> <span id="sellerPhone">Loading...</span></p>
+
+        <button type="button" id="whatsappButton" disabled>
+            Contact on WhatsApp
+        </button>
+
+        <p id="sellerMessage" role="status"></p>
+
+        <button type="button" class="back-button"
+                onclick="history.back()">
+            Back to Product
+        </button>
+    </main>
+
+    <script src="js/seller-details.js"></script>
+    <script src="js/seller-logout.js"></script>
+</body>
+</html>

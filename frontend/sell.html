@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Product - THRIFTBUY</title>
+    <link rel="stylesheet" href="./css/auth.css">
+    <link rel="stylesheet" href="./css/sell.css">
+
+    <style>
+        .image-upload {
+            border: 2px dashed #b8c4d8;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            background: #f8faff;
+            margin-top: 8px;
+        }
+
+        .image-upload input {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        #imagePreview {
+            margin-top: 15px;
+        }
+
+        #imagePreview img {
+            max-width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        #imagePreview button {
+            display: block;
+            margin: 10px auto 0;
+            padding: 8px 14px;
+            cursor: pointer;
+        }
+
+        .form-hint {
+            display: block;
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 7px;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="auth-container">
+        <div class="auth-card">
+            <h1>Sell Your Product</h1>
+            <p>Give your pre-loved item a new home!</p>
+
+            <form id="sellForm">
+                <div class="form-group">
+                    <label for="title">Product Title</label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="e.g. Used Dell Laptop"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Describe your product..."
+                        rows="4"
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Selling Price (₹)</label>
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        min="1"
+                        step="0.01"
+                        placeholder="Enter selling price"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="originalPrice">Original Price (₹)</label>
+                    <input
+                        type="number"
+                        id="originalPrice"
+                        name="originalPrice"
+                        min="0"
+                        step="0.01"
+                        placeholder="Enter original price"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="brand">Brand</label>
+                    <input
+                        type="text"
+                        id="brand"
+                        name="brand"
+                        placeholder="e.g. Samsung, Nike, Dell"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select a category</option>
+                        <option value="1">Electronics</option>
+                        <option value="2">Books</option>
+                        <option value="3">Furniture</option>
+                        <option value="4">Fashion</option>
+                        <option value="5">Vehicles</option>
+                        <option value="6">Sports</option>
+                        <option value="7">Home Appliances</option>
+                        <option value="8">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="condition">Product Condition</label>
+                    <select id="condition" name="condition" required>
+                        <option value="">Select condition</option>
+                        <option value="Like New">Like New</option>
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Used">Used</option>
+                    </select>
+                </div>
+
+                
+<!-- Product City -->
+<label for="productCity">Product City</label>
+<select id="productCity" name="city" required>
+    <option value="">Select your city</option>
+    <option value="Ahmedabad">Ahmedabad</option>
+    <option value="Surat">Surat</option>
+    <option value="Rajkot">Rajkot</option>
+    <option value="Vadodara">Vadodara</option>
+    <option value="Delhi">Delhi</option>
+    <option value="Pune">Pune</option>
+    <option value="Mumbai">Mumbai</option>
+</select>
+
+
+                <div class="form-group">
+                    <label for="productImage">Product Image</label>
+
+                    <div class="image-upload">
+                        <p>Select a clear photo of your product</p>
+                        <input
+                            type="file"
+                            id="productImage"
+                            name="productImage"
+                            accept="image/jpeg,image/png,image/webp"
+                        >
+                        <small class="form-hint">
+                            Supported formats: JPG, PNG, WebP. Maximum size: 5 MB.
+                        </small>
+                        <div id="imagePreview"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input
+                            type="checkbox"
+                            id="negotiable"
+                            name="negotiable"
+                        >
+                        Price is negotiable
+                    </label>
+                </div>
+
+                <button type="submit" id="sellButton">
+                    List Product
+                </button>
+
+                <p id="sellMessage" role="status" aria-live="polite"></p>
+            </form>
+
+            <p>
+                <a href="home.html">← Back to Home</a>
+            </p>
+        </div>
+    </main>
+
+    <script src="./js/sell.js"></script>
+
+    <script>
+        const imageInput = document.getElementById("productImage");
+        const imagePreview = document.getElementById("imagePreview");
+
+        let previewUrl = null;
+
+        imageInput.addEventListener("change", function () {
+            imagePreview.replaceChildren();
+
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+                previewUrl = null;
+            }
+
+            const file = this.files[0];
+
+            if (!file) return;
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+                alert("Please select a JPG, PNG, or WebP image.");
+                this.value = "";
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Image size must be 5 MB or less.");
+                this.value = "";
+                return;
+            }
+
+            previewUrl = URL.createObjectURL(file);
+
+            const img = document.createElement("img");
+            img.src = previewUrl;
+            img.alt = "Selected product image preview";
+
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.textContent = "Remove Image";
+
+            removeButton.addEventListener("click", () => {
+                imageInput.value = "";
+                imagePreview.replaceChildren();
+                URL.revokeObjectURL(previewUrl);
+                previewUrl = null;
+            });
+
+            imagePreview.append(img, removeButton);
+        });
+    </script>
+</body>
+</html>

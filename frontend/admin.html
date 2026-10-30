@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THRIFTBUY | Admin Dashboard</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 { margin: 0; }
+
+        button {
+            padding: 10px 16px;
+            border: 0;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px #0000000d;
+        }
+
+        .card p { color: #666; }
+
+        .number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #1d4ed8;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .actions a {
+            background: #1d4ed8;
+            color: white;
+            text-decoration: none;
+            padding: 13px 18px;
+            border-radius: 6px;
+        }
+
+        #message {
+            margin-top: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h2>THRIFTBUY Admin</h2>
+    <button id="logoutBtn">Logout</button>
+</header>
+
+<main>
+    <h1>Admin Dashboard</h1>
+    <p id="adminName">Checking admin access...</p>
+
+    <section class="stats">
+        <div class="card">
+            <p>Total Users</p>
+            <div class="number" id="totalUsers">—</div>
+        </div>
+
+        <div class="card">
+            <p>Total Products</p>
+            <div class="number" id="totalProducts">—</div>
+        </div>
+    </section>
+
+    <section class="actions">
+        <a href="admin-users.html">Manage Users</a>
+        <a href="admin-products.html">Manage Products</a>
+        <a href="home.html">View Marketplace</a>
+    </section>
+
+    <p id="message">Loading dashboard...</p>
+</main>
+
+<script>
+const AUTH_API = "http://127.0.0.1:5000/api/auth";
+const ADMIN_API = "http://127.0.0.1:5000/api/admin";
+
+async function loadDashboard() {
+    const message = document.getElementById("message");
+
+    try {
+        const meResponse = await fetch(`${AUTH_API}/me`, {
+            credentials: "include"
+        });
+
+        if (!meResponse.ok) {
+            message.textContent = "Session expired. Please log in again.";
+            window.location.href = "login.html";
+            return;
+        }
+
+        const meData = await meResponse.json();
+        const user = meData.user;
+
+        if (!user || user.role !== "admin") {
+            alert("Admin access only.");
+            window.location.href = "home.html";
+            return;
+        }
+
+        document.getElementById("adminName").textContent =
+            `Welcome, ${user.name}`;
+
+        const statsResponse = await fetch(`${ADMIN_API}/stats`, {
+            credentials: "include"
+        });
+
+        const stats = await statsResponse.json();
+
+        if (!statsResponse.ok || !stats.success) {
+            message.textContent =
+                stats.message || "Could not load statistics.";
+            return;
+        }
+
+        document.getElementById("totalUsers").textContent =
+            stats.total_users;
+
+        document.getElementById("totalProducts").textContent =
+            stats.total_products;
+
+        message.textContent = "Admin dashboard loaded successfully.";
+
+    } catch (error) {
+        console.error("Dashboard error:", error);
+        message.textContent =
+            "Cannot connect to Flask. Check that the backend is running.";
+    }
+}
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+    try {
+        await fetch(`${AUTH_API}/logout`, {
+            method: "POST",
+            credentials: "include"
+        });
+    } catch (error) {
+        console.error("Logout error:", error);
+    }
+
+    localStorage.removeItem("user");
+    window.location.href = "login.html";
+});
+
+loadDashboard();
+</script>
+</body>
+</html>

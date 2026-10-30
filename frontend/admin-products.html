@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THRIFTBUY | Manage Products</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        header h2 { margin: 0; }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 6px;
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+
+        .refresh {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .delete {
+            background: #dc2626;
+            color: white;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px #0000000d;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th { background: #e8eefc; }
+
+        #message {
+            color: #555;
+            margin: 18px 0;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: capitalize;
+            white-space: nowrap;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-sold {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-unknown {
+            background: #e5e7eb;
+            color: #374151;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h2>THRIFTBUY Admin</h2>
+    <a href="admin.html">← Back to Dashboard</a>
+</header>
+
+<main>
+    <h1>Manage Products</h1>
+    <p>Review marketplace listings and remove inappropriate products.</p>
+
+    <div class="toolbar">
+        <input
+            type="search"
+            id="search"
+            placeholder="Search by title, seller, city or status..."
+            aria-label="Search products"
+        >
+        <button class="refresh" id="refreshBtn">Refresh</button>
+    </div>
+
+    <p id="message">Checking admin access...</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Condition</th>
+                    <th>Seller</th>
+                    <th>City</th>
+                    <th>Listing Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="productsBody"></tbody>
+        </table>
+    </div>
+</main>
+
+<script>
+const API = "http://127.0.0.1:5000/api/admin";
+let allProducts = [];
+
+async function loadProducts() {
+    const message = document.getElementById("message");
+    const tbody = document.getElementById("productsBody");
+
+    message.textContent = "Loading products...";
+    tbody.replaceChildren();
+
+    try {
+        const response = await fetch(`${API}/products`, {
+            credentials: "include"
+        });
+
+        const data = await response.json();
+
+        if (response.status === 401) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (response.status === 403) {
+            message.textContent = "Admin access only.";
+            return;
+        }
+
+        if (!response.ok || !data.success) {
+            message.textContent = data.message || "Unable to load products.";
+            return;
+        }
+
+        allProducts = data.products || [];
+        renderProducts();
+
+    } catch (error) {
+        console.error(error);
+        message.textContent =
+            "Cannot connect to Flask. Check that the backend is running.";
+    }
+}
+
+function getListingStatus(product) {
+    return String(
+        product.listing_status || product.status || "Not set"
+    ).trim();
+}
+
+function getStatusClass(status) {
+    const normalized = status.toLowerCase();
+
+    if (normalized === "active") return "status-active";
+    if (normalized === "sold") return "status-sold";
+    if (normalized === "pending") return "status-pending";
+    if (normalized === "rejected") return "status-rejected";
+
+    return "status-unknown";
+}
+
+function renderProducts() {
+    const tbody = document.getElementById("productsBody");
+    const message = document.getElementById("message");
+
+    const search = document.getElementById("search").value
+        .trim()
+        .toLowerCase();
+
+    tbody.replaceChildren();
+
+    const filtered = allProducts.filter(product => {
+        const status = getListingStatus(product);
+
+        return [
+            product.title,
+            product.seller,
+            product.city,
+            status
+        ].some(value =>
+            String(value || "").toLowerCase().includes(search)
+        );
+    });
+
+    if (filtered.length === 0) {
+        message.textContent = "No matching products found.";
+        return;
+    }
+
+    filtered.forEach(product => {
+        const row = document.createElement("tr");
+
+        [
+            product.id,
+            product.title,
+            `₹${product.price}`,
+            product.category || "—",
+            product.condition_type || "—",
+            product.seller || "—",
+            product.city || "—"
+        ].forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+        });
+
+        // Listing Status column
+        const statusCell = document.createElement("td");
+        const status = getListingStatus(product);
+
+        const statusBadge = document.createElement("span");
+        statusBadge.className = `status ${getStatusClass(status)}`;
+        statusBadge.textContent = status;
+
+        statusCell.appendChild(statusBadge);
+        row.appendChild(statusCell);
+
+        // Delete button
+        const actionCell = document.createElement("td");
+        const deleteButton = document.createElement("button");
+
+        deleteButton.className = "delete";
+        deleteButton.textContent = "Delete";
+
+        deleteButton.addEventListener("click", () => {
+            deleteProduct(product);
+        });
+
+        actionCell.appendChild(deleteButton);
+        row.appendChild(actionCell);
+
+        tbody.appendChild(row);
+    });
+
+    message.textContent =
+        `Showing ${filtered.length} of ${allProducts.length} products.`;
+}
+
+async function deleteProduct(product) {
+    const confirmed = confirm(
+        `Delete "${product.title}" permanently? This cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const response = await fetch(
+            `${API}/products/${product.id}`,
+            {
+                method: "DELETE",
+                credentials: "include"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            alert(data.message || "Could not delete product.");
+            return;
+        }
+
+        allProducts = allProducts.filter(
+            item => item.id !== product.id
+        );
+
+        renderProducts();
+        alert("Product deleted successfully.");
+
+    } catch (error) {
+        console.error(error);
+        alert("Cannot connect to Flask.");
+    }
+}
+
+document.getElementById("search").addEventListener("input", renderProducts);
+document.getElementById("refreshBtn").addEventListener("click", loadProducts);
+
+loadProducts();
+</script>
+</body>
+</html>

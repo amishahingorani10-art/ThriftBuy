@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart - THRIFTBUY</title>
+    <link rel="stylesheet" href="css/cart.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="logo" href="home.html">THRIFTBUY</a>
+
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="sell.html">Sell</a>
+            <a href="profile.html">Profile</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+
+    <main class="cart-page">
+        <h1>My Shopping Cart</h1>
+        <p class="subtitle">Review your selected second-hand products.</p>
+
+        <div id="cartMessage" role="status" aria-live="polite"></div>
+
+        <div class="cart-layout">
+            <section id="cartItems" class="cart-items">
+                <p class="loading">Loading your cart...</p>
+            </section>
+
+            <aside class="cart-summary">
+                <h2>Order Summary</h2>
+
+                <div class="summary-row">
+                    <span>Items</span>
+                    <span id="itemCount">0</span>
+                </div>
+
+                <div class="summary-row total-row">
+                    <span>Total</span>
+                    <span id="cartTotal">₹0</span>
+                </div>
+
+                <p class="summary-note">
+                    This is an estimated total. Payment and checkout
+                    are not available yet.
+                </p>
+
+                <button id="checkoutBtn" class="checkout-btn">
+                    Checkout
+                </button>
+
+                <a href="home.html" class="continue-link">
+                    Continue Shopping
+                </a>
+            </aside>
+        </div>
+    </main>
+
+    <script src="js/cart.js"></script>
+</body>
+</html>

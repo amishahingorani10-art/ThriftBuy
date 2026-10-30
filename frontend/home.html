@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>THRIFTBUY - Buy & Sell Used Products</title>
+
+    <link rel="stylesheet" href="css/home.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+        <div class="logo">
+            THRIFTBUY
+        </div>
+
+        <div class="nav-links">
+
+            <a href="home.html">Home</a>
+            <a href="sell.html">Sell</a>
+            <a href="cart.html">Cart</a>
+
+            <a href="profile.html"
+               id="profileBtn"
+               style="display: none;">
+                Profile
+            </a>
+
+            <a href="login.html" id="loginBtn">
+                Login
+            </a>
+
+            <a href="register.html" id="registerBtn">
+                Register
+            </a>
+
+            <a href="#" id="logoutBtn" style="display: none;">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+
+        <div>
+            <h1>Buy Smart. Sell Easy.</h1>
+
+            <p>
+                Discover quality second-hand products at affordable prices.
+            </p>
+
+            <a href="sell.html" class="sell-btn">
+                Sell Your Product
+            </a>
+        </div>
+
+    </section>
+
+
+    <!-- CITY SECTION -->
+    <section class="city-section">
+
+        <h2>Find Products in Your City</h2>
+
+        <div class="city-filter">
+
+            <select id="citySelect">
+                <option value="">Select Your City</option>
+                <option value="Ahmedabad">Ahmedabad</option>
+                <option value="Surat">Surat</option>
+                <option value="Vadodara">Vadodara</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Pune">Pune</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Rajkot">Rajkot</option>
+            </select>
+
+            <button type="button" id="saveCityBtn">
+                Save City
+            </button>
+
+        </div>
+
+        <p id="selectedCityText"></p>
+
+        <div id="cityProducts" class="product-grid"></div>
+
+    </section>
+
+
+    <!-- PRODUCTS SECTION -->
+    <section class="products-section">
+
+        <!-- SEARCH AND FILTERS -->
+        <div class="filters">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search products..."
+            >
+
+            <select id="categoryFilter">
+                <option value="">All Categories</option>
+                <option value="1">Electronics</option>
+                <option value="2">Books</option>
+                <option value="3">Furniture</option>
+                <option value="4">Fashion</option>
+                <option value="5">Vehicles</option>
+                <option value="6">Sports</option>
+                <option value="7">Home Appliances</option>
+                <option value="8">Other</option>
+            </select>
+
+            <input
+                type="number"
+                id="minPrice"
+                placeholder="Min price"
+                min="0"
+            >
+
+            <input
+                type="number"
+                id="maxPrice"
+                placeholder="Max price"
+                min="0"
+            >
+
+            <select id="conditionFilter">
+                <option value="">Any Condition</option>
+                <option value="Like New">Like New</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Used">Used</option>
+            </select>
+
+            <select id="sortFilter">
+                <option value="latest">Latest</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+            </select>
+
+            <button type="button" id="searchBtn">
+                Search
+            </button>
+
+        </div>
+
+
+        <!-- LATEST PRODUCTS -->
+        <div class="section-header">
+
+            <div>
+                <h2>Latest Products</h2>
+                <p>Recently listed products on THRIFTBUY</p>
+            </div>
+
+        </div>
+
+        <div id="productsContainer" class="products-grid">
+
+            <p class="loading">
+                Loading products...
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- HOME JAVASCRIPT -->
+    <script src="js/home.js?v=5"></script>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+
+/* Sell Product Page */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 15px;
+}
+
+.auth-card {
+    width: 430px;
+    max-width: 100%;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+}
+
+.auth-card h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.auth-card > p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group > label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 15px;
+}
+
+.auth-card input:not([type="checkbox"]),
+.auth-card select,
+.auth-card textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+}
+
+.auth-card textarea {
+    resize: vertical;
+}
+
+.auth-card input:focus,
+.auth-card select:focus,
+.auth-card textarea:focus {
+    outline: none;
+    border-color: #333;
+}
+
+/* Negotiable checkbox */
+.form-group label:has(#negotiable) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    margin: 0;
+}
+
+#negotiable {
+    appearance: auto;
+    -webkit-appearance: checkbox;
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+    accent-color: #222;
+    cursor: pointer;
+}
+
+/* List Product button */
+#sellButton {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 7px;
+    background: #222;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#sellButton:hover {
+    background: #444;
+}
+
+#sellMessage {
+    text-align: center;
+    margin-top: 12px;
+}
+
+/* Image upload */
+.image-upload {
+    border: 2px dashed #b8c4d8;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    background: #f8faff;
+    margin-top: 8px;
+}
+
+.image-upload input {
+    width: 100%;
+    margin-top: 12px;
+}
+
+#imagePreview {
+    margin-top: 15px;
+}
+
+#imagePreview img {
+    max-width: 100%;
+    max-height: 250px;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+#imagePreview button {
+    display: block;
+    margin: 10px auto 0;
+    padding: 8px 14px;
+    cursor: pointer;
+}
+
+.form-hint {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 25px 20px;
+    }
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - THRIFTBUY</title>
+
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+
+<body>
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <h1>THRIFTBUY</h1>
+
+            <p class="subtitle">
+                My Profile
+            </p>
+
+            <form id="profileForm">
+
+                <input
+                    type="text"
+                    id="profileName"
+                    placeholder="Full Name"
+                    required
+                >
+
+                <input
+                    type="email"
+                    id="profileEmail"
+                    placeholder="Email Address"
+                    disabled
+                >
+
+                <input
+                    type="tel"
+                    id="profilePhone"
+                    placeholder="Phone Number"
+                >
+
+                <select id="profileCity" required>
+
+                    <option value="">
+                        Select Your City
+                    </option>
+
+                    <option value="Ahmedabad">
+                        Ahmedabad
+                    </option>
+
+                    <option value="Surat">
+                        Surat
+                    </option>
+
+                    <option value="Vadodara">
+                        Vadodara
+                    </option>
+
+                    <option value="Rajkot">
+                        Rajkot
+                    </option>
+
+                    <option value="Mumbai">
+                        Mumbai
+                    </option>
+
+                    <option value="Pune">
+                        Pune
+                    </option>
+
+                    <option value="Delhi">
+                        Delhi
+                    </option>
+
+                </select>
+
+                <button type="submit">
+                    Save Changes
+                </button>
+
+            </form>
+
+            <p id="profileMessage"></p>
+
+            <p class="switch-page">
+                <a href="home.html">
+                    ← Back to Home
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+    <script src="js/profile.js"></script>
+
+</body>
+
+</html>

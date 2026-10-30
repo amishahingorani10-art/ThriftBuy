@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - THRIFTBUY</title>
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+
+            <h1>THRIFTBUY</h1>
+            <p class="subtitle">Create your account</p>
+
+            <form id="registerForm">
+
+                <input
+                    type="text"
+                    id="registerName"
+                    name="name"
+                    placeholder="Full Name"
+                    required
+                >
+
+                <input
+                    type="email"
+                    id="registerEmail"
+                    name="email"
+                    placeholder="Email Address"
+                    required
+                >
+
+                <input
+                    type="tel"
+                    id="registerPhone"
+                    name="phone"
+                    placeholder="Phone Number"
+                    pattern="[0-9]{10}"
+                    maxlength="10"
+                    required
+                >
+
+                <select id="registerCity" name="city" required>
+                    <option value="">Select Your City</option>
+                    <option value="Ahmedabad">Ahmedabad</option>
+                    <option value="Surat">Surat</option>
+                    <option value="Rajkot">Rajkot</option>
+                    <option value="Vadodara">Vadodara</option>
+                    <option value="Gandhinagar">Gandhinagar</option>
+                </select>
+
+                <!-- Password -->
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        name="password"
+                        placeholder="Password (minimum 8 characters)"
+                        minlength="8"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        data-target="registerPassword"
+                        aria-label="Show password"
+                        aria-pressed="false"
+                    >
+                        <svg class="eye-icon"
+                             viewBox="0 0 24 24"
+                             width="20"
+                             height="20"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Confirm Password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        data-target="confirmPassword"
+                        aria-label="Show password"
+                        aria-pressed="false"
+                    >
+                        <svg class="eye-icon"
+                             viewBox="0 0 24 24"
+                             width="20"
+                             height="20"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <button type="submit">Create Account</button>
+
+            </form>
+
+            <p id="registerMessage" role="status"></p>
+
+            <p class="switch-page">
+                Already have an account?
+                <a href="login.html">Login</a>
+            </p>
+
+        </div>
+    </div>
+
+    <script src="js/auth.js?v=3"></script>
+
+    <script>
+        // Show / Hide Password
+        document.querySelectorAll(".password-toggle").forEach(button => {
+
+            button.addEventListener("click", function () {
+
+                const input = document.getElementById(
+                    this.dataset.target
+                );
+
+                const isHidden = input.type === "password";
+
+                input.type = isHidden ? "text" : "password";
+
+                this.innerHTML = isHidden
+                    ? `<svg viewBox="0 0 24 24" width="20" height="20"
+                         fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                         <path d="M3 3l18 18"/>
+                         <path d="M10.6 10.6a2 2 0 002.8 2.8"/>
+                         <path d="M9.9 5.2A10.8 10.8 0 0112 5c6.4 0 10 7 10 7"/>
+                         <path d="M6.2 6.2C3.5 8.1 2 12 2 12s3.6 7 10 7"/>
+                       </svg>`
+                    : `<svg viewBox="0 0 24 24" width="20" height="20"
+                         fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                         <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/>
+                         <circle cx="12" cy="12" r="3"/>
+                       </svg>`;
+
+                this.setAttribute(
+                    "aria-label",
+                    isHidden ? "Hide password" : "Show password"
+                );
+
+                this.setAttribute("aria-pressed", String(isHidden));
+
+            });
+
+        });
+
+        // Confirm Password Validation
+        document.getElementById("registerForm").addEventListener(
+            "submit",
+            function(event) {
+
+                const password =
+                    document.getElementById("registerPassword").value;
+
+                const confirmPassword =
+                    document.getElementById("confirmPassword").value;
+
+                const message =
+                    document.getElementById("registerMessage");
+
+                if (password !== confirmPassword) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    message.textContent = "Passwords do not match!";
+                    message.style.color = "red";
+                    return;
+                }
+
+                if (password.length < 8) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    message.textContent =
+                        "Password must contain at least 8 characters.";
+                    message.style.color = "red";
+                }
+
+            }
+        );
+    </script>
+
+</body>
+</html>
